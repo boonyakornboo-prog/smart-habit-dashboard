@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Habit 🐹 | Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="logo">
+        <span class="emoji">🐹</span>
+        <div>
+          <h1>Smart Habit</h1>
+          <p>ระบบดูแลสัตว์เลี้ยงอัจฉริยะ</p>
+        </div>
+      </div>
+      <div class="status-badge" id="connectionStatus">
+        <span class="dot"></span>
+        <span id="statusText">กำลังเชื่อมต่อ...</span>
+      </div>
+    </header>
+
+    <!-- Last Update -->
+    <div class="last-update">
+      อัปเดตล่าสุด: <span id="lastUpdate">-</span>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="cards">
+      <!-- Temperature -->
+      <div class="card temp">
+        <div class="card-icon">🌡️</div>
+        <div class="card-content">
+          <h3>อุณหภูมิ</h3>
+          <div class="value"><span id="temperature">--</span><small>°C</small></div>
+        </div>
+      </div>
+
+      <!-- Humidity -->
+      <div class="card humidity">
+        <div class="card-icon">💧</div>
+        <div class="card-content">
+          <h3>ความชื้น</h3>
+          <div class="value"><span id="humidity">--</span><small>%</small></div>
+        </div>
+      </div>
+
+      <!-- Water Level -->
+      <div class="card water">
+        <div class="card-icon">🚰</div>
+        <div class="card-content">
+          <h3>ระดับน้ำ</h3>
+          <div class="value"><span id="water">--</span><small>%</small></div>
+          <div class="progress-bar">
+            <div class="progress" id="waterBar"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Food Level -->
+      <div class="card food">
+        <div class="card-icon">🌾</div>
+        <div class="card-content">
+          <h3>ระดับอาหาร</h3>
+          <div class="value"><span id="food">--</span><small>%</small></div>
+          <div class="progress-bar">
+            <div class="progress" id="foodBar"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fan Status -->
+      <div class="card fan">
+        <div class="card-icon">🌀</div>
+        <div class="card-content">
+          <h3>พัดลม</h3>
+          <div class="value status" id="fan">--</div>
+        </div>
+      </div>
+
+      <!-- Servo Status -->
+      <div class="card servo">
+        <div class="card-icon">🍽️</div>
+        <div class="card-content">
+          <h3>เซอร์โว (อาหาร)</h3>
+          <div class="value status" id="servo">--</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Camera Section -->
+    <div class="camera-section">
+      <h2>📹 กล้องดูสัตว์เลี้ยง</h2>
+      <div class="camera-box">
+        <p>ใส่ URL ของ ESP32-CAM ด้านล่าง</p>
+        <input type="text" id="cameraUrl" placeholder="http://192.168.x.x" value="">
+        <button onclick="openCamera()">เปิดกล้อง</button>
+        <p class="note">* กล้องจะทำงานได้เฉพาะเมื่ออยู่ใน Wi-Fi เดียวกัน</p>
+      </div>
+    </div>
+
+    <footer>
+      <p>Smart Habit 2026 • By 311 4, 8, 22 • Computing Science</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
