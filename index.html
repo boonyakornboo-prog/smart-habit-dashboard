@@ -96,11 +96,21 @@
     <!-- Camera Section -->
     <div class="camera-section">
       <h2>📹 กล้องดูสัตว์เลี้ยง</h2>
+
       <div class="camera-box">
-        <p>ใส่ URL ของ ESP32-CAM ด้านล่าง</p>
-        <input type="text" id="cameraUrl" placeholder="http://192.168.x.x" value="">
-        <button onclick="openCamera()">เปิดกล้อง</button>
-        <p class="note">* กล้องจะทำงานได้เฉพาะเมื่ออยู่ใน Wi-Fi เดียวกัน</p>
+        <div class="camera-frame">
+          <img id="cameraFeed"
+               src="http://192.168.1.50/stream"
+               alt="กำลังโหลดกล้อง..."
+               onerror="this.src=''; this.alt='ไม่พบกล้อง (เช็ค IP หรือ Wi-Fi)'">
+        </div>
+
+        <div class="camera-controls">
+          <input type="text" id="cameraUrl" placeholder="เปลี่ยน IP กล้อง เช่น http://192.168.1.50" value="http://192.168.1.50">
+          <button onclick="reloadCamera()">รีเฟรชกล้อง</button>
+        </div>
+
+        <p class="note">* กล้องจะแสดงได้เฉพาะเมื่อคุณกับ ESP32-CAM อยู่ใน Wi-Fi เดียวกัน</p>
       </div>
     </div>
 

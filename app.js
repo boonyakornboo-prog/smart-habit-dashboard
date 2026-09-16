@@ -84,13 +84,21 @@ async function fetchData() {
   }
 }
 
-function openCamera() {
-  const url = document.getElementById("cameraUrl").value.trim();
-  if (url) {
-    window.open(url, "_blank");
-  } else {
-    alert("กรุณาใส่ URL ของกล้อง ESP32-CAM ก่อน");
+function reloadCamera() {
+  const urlInput = document.getElementById("cameraUrl").value.trim();
+  const img = document.getElementById("cameraFeed");
+
+  if (!urlInput) {
+    alert("กรุณาใส่ URL ของกล้อง");
+    return;
   }
+
+  let streamUrl = urlInput;
+  if (!streamUrl.includes("/stream") && !streamUrl.includes("/capture")) {
+    streamUrl = streamUrl.replace(/\/$/, "") + "/stream";
+  }
+
+  img.src = streamUrl + "?t=" + new Date().getTime();
 }
 
 // เริ่มต้น
