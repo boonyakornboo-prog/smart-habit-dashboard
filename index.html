@@ -5,8 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smart Habit 🐹 | Dashboard</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 </head>
 <body>
   <div class="container">
@@ -25,14 +28,82 @@
       </div>
     </header>
 
+    <!-- Pet Profile Section -->
+    <section class="pet-section">
+      <h2>🐾 ข้อมูลสัตว์เลี้ยง</h2>
+      
+      <div class="pet-grid">
+        <!-- ฟอร์มกรอก -->
+        <div class="pet-form">
+          <div class="form-group">
+            <label>ชนิดสัตว์เลี้ยง</label>
+            <select id="petType">
+              <option value="">-- เลือกชนิดสัตว์ --</option>
+              <option value="หนูแฮมสเตอร์">หนูแฮมสเตอร์</option>
+              <option value="หนูตะเภา">หนูตะเภา</option>
+              <option value="กระต่าย">กระต่าย</option>
+              <option value="ชินชิล่า">ชินชิล่า</option>
+              <option value="แกสบี้">แกสบี้</option>
+              <option value="ชูก้าไรเดอร์">ชูก้าไรเดอร์</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>ชื่อสัตว์เลี้ยง</label>
+            <input type="text" id="petName" placeholder="เช่น เจ้าขาว">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>วันเกิด</label>
+              <input type="date" id="petBirthdate">
+            </div>
+            <div class="form-group">
+              <label>น้ำหนัก (กรัม)</label>
+              <input type="number" id="petWeight" placeholder="เช่น 120">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>เพศ</label>
+            <select id="petGender">
+              <option value="">-- เลือกเพศ --</option>
+              <option value="ผู้">ผู้</option>
+              <option value="เมีย">เมีย</option>
+              <option value="ไม่ระบุ">ไม่ระบุ</option>
+            </select>
+          </div>
+
+          <button class="btn-save" onclick="savePetData()">บันทึกข้อมูลสัตว์เลี้ยง</button>
+        </div>
+
+        <!-- แสดงข้อมูลปัจจุบัน + ค่ามาตรฐาน -->
+        <div class="pet-info">
+          <h3>ข้อมูลปัจจุบัน</h3>
+          <div id="currentPetInfo">
+            <p>ยังไม่มีข้อมูลสัตว์เลี้ยง</p>
+          </div>
+
+          <div class="ideal-box" id="idealBox" style="display:none;">
+            <h4>ค่ามาตรฐานของชนิดนี้</h4>
+            <div class="ideal-grid">
+              <div>อุณหภูมิ: <span id="idealTemp">-</span></div>
+              <div>ความชื้น: <span id="idealHumidity">-</span></div>
+              <div>แจ้งเตือนอาหาร: <span id="idealFood">-</span></div>
+              <div>แจ้งเตือนน้ำ: <span id="idealWater">-</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Last Update -->
     <div class="last-update">
       อัปเดตล่าสุด: <span id="lastUpdate">-</span>
     </div>
 
-    <!-- Cards Grid -->
+    <!-- Sensor Cards -->
     <div class="cards">
-      <!-- Temperature -->
       <div class="card temp">
         <div class="card-icon">🌡️</div>
         <div class="card-content">
@@ -41,7 +112,6 @@
         </div>
       </div>
 
-      <!-- Humidity -->
       <div class="card humidity">
         <div class="card-icon">💧</div>
         <div class="card-content">
@@ -50,31 +120,24 @@
         </div>
       </div>
 
-      <!-- Water Level -->
       <div class="card water">
         <div class="card-icon">🚰</div>
         <div class="card-content">
           <h3>ระดับน้ำ</h3>
           <div class="value"><span id="water">--</span><small>%</small></div>
-          <div class="progress-bar">
-            <div class="progress" id="waterBar"></div>
-          </div>
+          <div class="progress-bar"><div class="progress" id="waterBar"></div></div>
         </div>
       </div>
 
-      <!-- Food Level -->
       <div class="card food">
         <div class="card-icon">🌾</div>
         <div class="card-content">
           <h3>ระดับอาหาร</h3>
           <div class="value"><span id="food">--</span><small>%</small></div>
-          <div class="progress-bar">
-            <div class="progress" id="foodBar"></div>
-          </div>
+          <div class="progress-bar"><div class="progress" id="foodBar"></div></div>
         </div>
       </div>
 
-      <!-- Fan Status -->
       <div class="card fan">
         <div class="card-icon">🌀</div>
         <div class="card-content">
@@ -83,7 +146,6 @@
         </div>
       </div>
 
-      <!-- Servo Status -->
       <div class="card servo">
         <div class="card-icon">🍽️</div>
         <div class="card-content">
@@ -93,24 +155,18 @@
       </div>
     </div>
 
-    <!-- Camera Section -->
+    <!-- Camera -->
     <div class="camera-section">
       <h2>📹 กล้องดูสัตว์เลี้ยง</h2>
-
       <div class="camera-box">
         <div class="camera-frame">
-          <img id="cameraFeed"
-               src="http://192.168.1.50/stream"
-               alt="กำลังโหลดกล้อง..."
-               onerror="this.src=''; this.alt='ไม่พบกล้อง (เช็ค IP หรือ Wi-Fi)'">
+          <img id="cameraFeed" src="" alt="ใส่ IP กล้องด้านล่าง">
         </div>
-
         <div class="camera-controls">
-          <input type="text" id="cameraUrl" placeholder="เปลี่ยน IP กล้อง เช่น http://192.168.1.50" value="http://192.168.1.50">
+          <input type="text" id="cameraUrl" placeholder="http://192.168.x.x" value="">
           <button onclick="reloadCamera()">รีเฟรชกล้อง</button>
         </div>
-
-        <p class="note">* กล้องจะแสดงได้เฉพาะเมื่อคุณกับ ESP32-CAM อยู่ใน Wi-Fi เดียวกัน</p>
+        <p class="note">* กล้องจะแสดงได้เฉพาะเมื่ออยู่ใน Wi-Fi เดียวกัน</p>
       </div>
     </div>
 
